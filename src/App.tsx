@@ -16,16 +16,28 @@ import Control from './components/Control';
 import DemoMode from './components/DemoMode';
 import { Clients, Reports, HistoryPage, SettingsPage } from './components/Pages';
 import LandingPage from './components/LandingPage';
-import { Monitor, X } from 'lucide-react';
+import AuthPage from './components/AuthPage';
+import { Monitor, X, LogOut } from 'lucide-react';
 
 function AppContent() {
   const { state, dispatch } = useAppState();
   const { currentPage, isPresentationMode, isDemoMode } = state;
   const [showLanding, setShowLanding] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Show Landing Page first
   if (showLanding) {
     return <LandingPage onEnter={() => setShowLanding(false)} />;
+  }
+
+  // Show Auth Page after Landing
+  if (!isAuthenticated) {
+    return (
+      <AuthPage
+        onAuthenticated={() => setIsAuthenticated(true)}
+        onBack={() => setShowLanding(true)}
+      />
+    );
   }
 
   const renderPage = () => {
@@ -91,10 +103,14 @@ function AppContent() {
           </div>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setShowLanding(true)}
+              onClick={() => {
+                setIsAuthenticated(false);
+                setShowLanding(true);
+              }}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-colors cursor-pointer"
             >
-              ← Landing Page
+              <LogOut size={14} />
+              Déconnexion
             </button>
             <button
               onClick={() => dispatch({ type: 'TOGGLE_PRESENTATION_MODE' })}

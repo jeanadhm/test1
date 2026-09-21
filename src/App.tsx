@@ -4,6 +4,7 @@
 // by PrimeAxis
 // ============================================================
 
+import { useState } from 'react';
 import { AppProvider, useAppState } from './store/AppContext';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
@@ -14,11 +15,18 @@ import DataAnalysis from './components/DataAnalysis';
 import Control from './components/Control';
 import DemoMode from './components/DemoMode';
 import { Clients, Reports, HistoryPage, SettingsPage } from './components/Pages';
+import LandingPage from './components/LandingPage';
 import { Monitor, X } from 'lucide-react';
 
 function AppContent() {
   const { state, dispatch } = useAppState();
   const { currentPage, isPresentationMode, isDemoMode } = state;
+  const [showLanding, setShowLanding] = useState(true);
+
+  // Show Landing Page first
+  if (showLanding) {
+    return <LandingPage onEnter={() => setShowLanding(false)} />;
+  }
 
   const renderPage = () => {
     switch (currentPage) {
@@ -82,15 +90,19 @@ function AppContent() {
             )}
           </div>
           <div className="flex items-center gap-2">
-            {isPresentationMode ? null : (
-              <button
-                onClick={() => dispatch({ type: 'TOGGLE_PRESENTATION_MODE' })}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-colors cursor-pointer"
-              >
-                <Monitor size={14} />
-                Présentation
-              </button>
-            )}
+            <button
+              onClick={() => setShowLanding(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-colors cursor-pointer"
+            >
+              ← Landing Page
+            </button>
+            <button
+              onClick={() => dispatch({ type: 'TOGGLE_PRESENTATION_MODE' })}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-colors cursor-pointer"
+            >
+              <Monitor size={14} />
+              Présentation
+            </button>
           </div>
         </div>
 

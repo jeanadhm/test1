@@ -4,7 +4,7 @@
 // by PrimeAxis
 // ============================================================
 
-import { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { AppProvider, useAppState } from './store/AppContext';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
@@ -20,25 +20,37 @@ import AuthPage from './components/AuthPage';
 import { Monitor, X, LogOut } from 'lucide-react';
 
 function AppContent() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPageWrapper />} />
+        <Route path="/auth" element={<AuthPageWrapper />} />
+        <Route path="/dashboard/*" element={<DashboardWrapper />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+function LandingPageWrapper() {
+  const navigate = useNavigate();
+  return <LandingPage onEnter={() => navigate('/auth')} />;
+}
+
+function AuthPageWrapper() {
+  const navigate = useNavigate();
+  return (
+    <AuthPage
+      onAuthenticated={() => navigate('/dashboard')}
+      onBack={() => navigate('/')}
+    />
+  );
+}
+
+function DashboardWrapper() {
   const { state, dispatch } = useAppState();
+  const navigate = useNavigate();
   const { currentPage, isPresentationMode, isDemoMode } = state;
-  const [showLanding, setShowLanding] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // Show Landing Page first
-  if (showLanding) {
-    return <LandingPage onEnter={() => setShowLanding(false)} />;
-  }
-
-  // Show Auth Page after Landing
-  if (!isAuthenticated) {
-    return (
-      <AuthPage
-        onAuthenticated={() => setIsAuthenticated(true)}
-        onBack={() => setShowLanding(true)}
-      />
-    );
-  }
 
   const renderPage = () => {
     switch (currentPage) {
@@ -85,17 +97,17 @@ function AppContent() {
   }
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       {/* Sidebar */}
       <Sidebar />
 
       {/* Main content */}
       <main className="flex-1 min-h-screen">
         {/* Top bar */}
-        <div className="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-30">
+        <div className="bg-white/80 backdrop-blur-xl border-b border-blue-100 px-6 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm">
           <div className="flex items-center gap-3">
             {isDemoMode && (
-              <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-xs font-medium">
+              <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 text-amber-700 text-xs font-medium shadow-sm">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
                 Mode Démo — Données fictives
               </span>
@@ -103,18 +115,15 @@ function AppContent() {
           </div>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => {
-                setIsAuthenticated(false);
-                setShowLanding(true);
-              }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-colors cursor-pointer"
+              onClick={() => navigate('/auth')}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors cursor-pointer border border-transparent hover:border-blue-200"
             >
               <LogOut size={14} />
               Déconnexion
             </button>
             <button
               onClick={() => dispatch({ type: 'TOGGLE_PRESENTATION_MODE' })}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors cursor-pointer border border-transparent hover:border-blue-200"
             >
               <Monitor size={14} />
               Présentation
@@ -128,9 +137,9 @@ function AppContent() {
         </div>
 
         {/* Footer */}
-        <footer className="px-6 py-4 border-t border-slate-100 mt-8">
-          <p className="text-xs text-slate-400 text-center">
-            <span className="font-semibold text-slate-500">KONTA</span> by PrimeAxis — Rendre autonome votre entreprise avec l'Intelligence Artificielle.
+        <footer className="px-6 py-4 border-t border-blue-100 mt-8 bg-white/50 backdrop-blur-sm">
+          <p className="text-xs text-slate-500 text-center">
+            <span className="font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">KONTA</span> by PrimeAxis — Rendre autonome votre entreprise avec l'Intelligence Artificielle.
           </p>
         </footer>
       </main>

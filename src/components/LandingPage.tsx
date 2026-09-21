@@ -16,6 +16,7 @@ interface LandingPageProps {
 }
 
 export default function LandingPage({ onEnter }: LandingPageProps) {
+  // onEnter sera appelé pour naviguer vers /auth
   return (
     <div className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 text-slate-900 antialiased overflow-x-hidden">
       <Nav onEnter={onEnter} />

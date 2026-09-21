@@ -1,13 +1,14 @@
 // ============================================================
-// KONTA — Landing Page v2
-// Design premium avec images et animations avancées
+// KONTA — Landing Page v3
+// Design bleu premium avec animations spectaculaires
 // ============================================================
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useInView, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
 import {
   ArrowRight, ArrowUpRight, FileText, BarChart3, ShieldCheck,
-  MessageSquare, Minus, Plus, Sparkles, Zap, CheckCircle2, Check
+  MessageSquare, Minus, Plus, Sparkles, Zap, CheckCircle2, Check,
+  ChevronDown
 } from 'lucide-react';
 
 interface LandingPageProps {
@@ -16,7 +17,7 @@ interface LandingPageProps {
 
 export default function LandingPage({ onEnter }: LandingPageProps) {
   return (
-    <div className="bg-stone-50 text-stone-900 antialiased overflow-x-hidden">
+    <div className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 text-slate-900 antialiased overflow-x-hidden">
       <Nav onEnter={onEnter} />
       <Hero onEnter={onEnter} />
       <ImageShowcase />
@@ -33,7 +34,7 @@ export default function LandingPage({ onEnter }: LandingPageProps) {
 }
 
 // ============================================================
-// NAV
+// NAV — Bleu premium
 // ============================================================
 function Nav({ onEnter }: { onEnter: () => void }) {
   const [scrolled, setScrolled] = useState(false);
@@ -46,38 +47,42 @@ function Nav({ onEnter }: { onEnter: () => void }) {
 
   return (
     <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? 'bg-white/80 backdrop-blur-xl border-b border-stone-200/60 shadow-sm' : ''
+        scrolled ? 'bg-white/90 backdrop-blur-xl border-b border-blue-100 shadow-lg shadow-blue-500/5' : ''
       }`}
     >
       <div className="max-w-[1400px] mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
         <motion.div 
           className="flex items-center gap-2.5"
-          whileHover={{ scale: 1.02 }}
+          whileHover={{ scale: 1.05 }}
         >
-          <div className="w-8 h-8 bg-stone-900 rounded-lg flex items-center justify-center shadow-lg">
-            <span className="text-white text-xs font-bold">K</span>
-          </div>
+          <motion.div 
+            className="w-9 h-9 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30"
+            whileHover={{ rotate: 360 }}
+            transition={{ duration: 0.6 }}
+          >
+            <span className="text-white text-sm font-bold">K</span>
+          </motion.div>
           <div>
-            <span className="font-bold text-stone-900 tracking-tight">Konta</span>
-            <span className="text-[10px] text-stone-400 ml-2 hidden sm:inline">by PrimeAxis</span>
+            <span className="font-bold text-slate-900 tracking-tight">Konta</span>
+            <span className="text-[10px] text-blue-500 ml-2 hidden sm:inline font-medium">by PrimeAxis</span>
           </div>
         </motion.div>
 
-        <div className="hidden md:flex items-center gap-8 text-sm text-stone-600">
-          <a href="#produit" className="hover:text-stone-900 transition-colors">Produit</a>
-          <a href="#features" className="hover:text-stone-900 transition-colors">Fonctionnalités</a>
-          <a href="#process" className="hover:text-stone-900 transition-colors">Processus</a>
+        <div className="hidden md:flex items-center gap-8 text-sm text-slate-600">
+          <a href="#produit" className="hover:text-blue-600 transition-colors font-medium">Produit</a>
+          <a href="#features" className="hover:text-blue-600 transition-colors font-medium">Fonctionnalités</a>
+          <a href="#process" className="hover:text-blue-600 transition-colors font-medium">Processus</a>
         </div>
 
         <motion.button
           onClick={onEnter}
-          whileHover={{ scale: 1.05, boxShadow: '0 10px 30px rgba(0,0,0,0.15)' }}
+          whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(59,130,246,0.3)' }}
           whileTap={{ scale: 0.95 }}
-          className="px-5 py-2.5 bg-stone-900 text-white text-sm font-medium rounded-lg hover:bg-stone-800 transition-all cursor-pointer shadow-md"
+          className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all cursor-pointer shadow-lg shadow-blue-500/30"
         >
           Ouvrir Konta
         </motion.button>
@@ -87,29 +92,40 @@ function Nav({ onEnter }: { onEnter: () => void }) {
 }
 
 // ============================================================
-// HERO — Avec image de fond et parallax
+// HERO — Bleu spectaculaire avec animations dingues
 // ============================================================
 function Hero({ onEnter }: { onEnter: () => void }) {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 300]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, 400]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 1.1]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 1.2]);
+  const rotate = useTransform(scrollYProgress, [0, 1], [0, 10]);
 
   return (
-    <section ref={ref} className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image with Parallax */}
+    <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Animated gradient background */}
       <motion.div 
-        style={{ y, scale }}
+        style={{ y, scale, rotate }}
         className="absolute inset-0 z-0"
       >
-        <img 
-          src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1920&q=80"
-          alt="Office desk"
-          className="w-full h-full object-cover"
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700" />
+        <motion.div
+          animate={{
+            background: [
+              'radial-gradient(ellipse 80% 50% at 20% 40%, rgba(255,255,255,0.1) 0%, transparent 50%)',
+              'radial-gradient(ellipse 80% 50% at 80% 60%, rgba(255,255,255,0.1) 0%, transparent 50%)',
+              'radial-gradient(ellipse 80% 50% at 50% 30%, rgba(255,255,255,0.15) 0%, transparent 50%)',
+              'radial-gradient(ellipse 80% 50% at 20% 40%, rgba(255,255,255,0.1) 0%, transparent 50%)',
+            ],
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+          className="absolute inset-0"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-stone-900/80 via-stone-900/60 to-stone-50" />
       </motion.div>
+
+      {/* Floating orbs */}
+      <FloatingOrbs />
 
       {/* Content */}
       <motion.div 
@@ -117,54 +133,73 @@ function Hero({ onEnter }: { onEnter: () => void }) {
         className="relative z-10 text-center px-6 max-w-5xl mx-auto"
       >
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.8 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8"
+          initial={{ opacity: 0, y: 50, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 0.3, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 mb-8 shadow-2xl"
         >
-          <Sparkles size={14} className="text-amber-300" />
-          <span className="text-sm text-white/90 font-medium">Pour les cabinets comptables</span>
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+          >
+            <Sparkles size={16} className="text-amber-300" />
+          </motion.div>
+          <span className="text-sm text-white font-semibold">Pour les cabinets comptables</span>
         </motion.div>
 
         <motion.h1
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-[0.9] tracking-tight mb-6"
+          initial={{ opacity: 0, y: 80, rotateX: -90 }}
+          animate={{ opacity: 1, y: 0, rotateX: 0 }}
+          transition={{ delay: 0.5, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white leading-[0.85] tracking-tight mb-8"
         >
           Votre travail,
           <br />
-          <span className="bg-gradient-to-r from-amber-200 to-amber-400 bg-clip-text text-transparent">
+          <motion.span
+            animate={{
+              backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+            }}
+            transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
+            className="bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-200 bg-clip-text text-transparent bg-[length:200%_auto]"
+          >
             accéléré.
-          </span>
+          </motion.span>
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.8 }}
-          className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10 leading-relaxed"
+          transition={{ delay: 0.8, duration: 1 }}
+          className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto mb-12 leading-relaxed font-medium"
         >
           Konta lit vos factures, analyse vos fichiers Excel, détecte les anomalies
           et prépare vos rapports. Vous gardez le contrôle.
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9, duration: 0.8 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          transition={{ delay: 1, duration: 1 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-5"
         >
           <motion.button
             onClick={onEnter}
-            whileHover={{ scale: 1.05, boxShadow: '0 20px 50px rgba(0,0,0,0.3)' }}
+            whileHover={{ scale: 1.08, boxShadow: '0 30px 60px rgba(0,0,0,0.3)' }}
             whileTap={{ scale: 0.95 }}
-            className="group flex items-center gap-3 px-8 py-4 bg-white text-stone-900 text-base font-semibold rounded-xl hover:bg-stone-50 transition-all cursor-pointer shadow-2xl"
+            className="group relative flex items-center gap-3 px-10 py-5 bg-white text-blue-600 text-lg font-bold rounded-2xl hover:bg-blue-50 transition-all cursor-pointer shadow-2xl overflow-hidden"
           >
-            Accéder au dashboard
-            <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            <span className="relative z-10 flex items-center gap-3">
+              Accéder au dashboard
+              <ArrowRight size={22} className="group-hover:translate-x-2 transition-transform" />
+            </span>
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500"
+              initial={{ x: '-100%' }}
+              whileHover={{ x: 0 }}
+              transition={{ duration: 0.4 }}
+            />
           </motion.button>
-          <span className="text-sm text-white/60">
+          <span className="text-base text-white/70 font-medium">
             Démo interactive incluse
           </span>
         </motion.div>
@@ -174,19 +209,16 @@ function Hero({ onEnter }: { onEnter: () => void }) {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+        transition={{ delay: 2 }}
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10"
       >
         <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-2"
+          animate={{ y: [0, 15, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          className="flex flex-col items-center gap-2"
         >
-          <motion.div
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="w-1 h-2 bg-white/60 rounded-full"
-          />
+          <span className="text-xs text-white/60 font-medium">Scroll</span>
+          <ChevronDown size={24} className="text-white/60" />
         </motion.div>
       </motion.div>
     </section>
@@ -194,7 +226,49 @@ function Hero({ onEnter }: { onEnter: () => void }) {
 }
 
 // ============================================================
-// IMAGE SHOWCASE — Galerie avec hover effects
+// FLOATING ORBS — Orbes animés en arrière-plan
+// ============================================================
+function FloatingOrbs() {
+  const orbs = Array.from({ length: 8 }, (_, i) => ({
+    id: i,
+    size: Math.random() * 300 + 100,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    duration: Math.random() * 20 + 15,
+    delay: Math.random() * 5,
+  }));
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {orbs.map((orb) => (
+        <motion.div
+          key={orb.id}
+          className="absolute rounded-full bg-white/5 blur-3xl"
+          style={{
+            width: orb.size,
+            height: orb.size,
+            left: `${orb.x}%`,
+            top: `${orb.y}%`,
+          }}
+          animate={{
+            x: [0, 100, -50, 0],
+            y: [0, -80, 60, 0],
+            scale: [1, 1.2, 0.9, 1],
+          }}
+          transition={{
+            duration: orb.duration,
+            repeat: Infinity,
+            delay: orb.delay,
+            ease: 'easeInOut',
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+// ============================================================
+// IMAGE SHOWCASE — Galerie avec effets spectaculaires
 // ============================================================
 function ImageShowcase() {
   const ref = useRef(null);
@@ -204,60 +278,69 @@ function ImageShowcase() {
     {
       url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
       title: 'Analyse de données',
-      desc: 'Visualisez vos finances en temps réel'
+      desc: 'Visualisez vos finances en temps réel',
+      gradient: 'from-blue-500 to-cyan-500'
     },
     {
       url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
       title: 'Rapports automatiques',
-      desc: 'Générez des rapports professionnels en un clic'
+      desc: 'Générez des rapports professionnels en un clic',
+      gradient: 'from-indigo-500 to-purple-500'
     },
     {
       url: 'https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=800&q=80',
       title: 'Contrôle intelligent',
-      desc: 'Détectez les anomalies automatiquement'
+      desc: 'Détectez les anomalies automatiquement',
+      gradient: 'from-purple-500 to-pink-500'
     },
   ];
 
   return (
-    <section ref={ref} className="py-24 md:py-32 px-6 md:px-10 bg-white">
+    <section ref={ref} className="py-32 md:py-40 px-6 md:px-10 bg-white relative">
       <div className="max-w-[1400px] mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.8 }}
+          className="text-center mb-20"
         >
-          <h2 className="text-3xl md:text-5xl font-bold text-stone-900 mb-4">
-            Puissant. Intuitif. Fiable.
+          <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-6">
+            Puissant. Intuitif.
+            <br />
+            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              Fiable.
+            </span>
           </h2>
-          <p className="text-lg text-stone-600 max-w-2xl mx-auto">
+          <p className="text-xl text-slate-600 max-w-2xl mx-auto">
             Découvrez comment Konta transforme votre façon de travailler
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-8">
           {images.map((img, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 50 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * 0.2, duration: 0.6 }}
-              whileHover={{ y: -10, transition: { duration: 0.3 } }}
-              className="group relative rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-shadow"
+              initial={{ opacity: 0, y: 80, rotateY: -30 }}
+              animate={isInView ? { opacity: 1, y: 0, rotateY: 0 } : {}}
+              transition={{ delay: i * 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ y: -20, scale: 1.05, transition: { duration: 0.4 } }}
+              className="group relative rounded-3xl overflow-hidden cursor-pointer shadow-2xl hover:shadow-blue-500/20"
             >
               <div className="aspect-[4/5] overflow-hidden">
                 <motion.img
                   src={img.url}
                   alt={img.title}
                   className="w-full h-full object-cover"
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ duration: 0.6 }}
+                  whileHover={{ scale: 1.2 }}
+                  transition={{ duration: 0.8 }}
                 />
               </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="absolute bottom-0 left-0 right-0 p-6 text-white translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                <h3 className="text-xl font-bold mb-2">{img.title}</h3>
-                <p className="text-sm text-white/80">{img.desc}</p>
+              <motion.div 
+                className={`absolute inset-0 bg-gradient-to-t ${img.gradient} opacity-0 group-hover:opacity-90 transition-opacity duration-500`}
+              />
+              <div className="absolute bottom-0 left-0 right-0 p-8 text-white translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                <h3 className="text-2xl font-bold mb-3">{img.title}</h3>
+                <p className="text-base text-white/90">{img.desc}</p>
               </div>
             </motion.div>
           ))}
@@ -268,7 +351,7 @@ function ImageShowcase() {
 }
 
 // ============================================================
-// CAPABILITIES — Avec icônes animées
+// CAPABILITIES — Cards avec effets 3D
 // ============================================================
 function Capabilities() {
   const ref = useRef(null);
@@ -276,67 +359,70 @@ function Capabilities() {
 
   const capabilities = [
     {
-      icon: <FileText size={24} />,
+      icon: <FileText size={28} />,
       title: 'Extraction de factures',
       desc: 'PDF, images, scans. Fournisseur, montants, dates, TVA — extraits automatiquement. Vous validez.',
-      color: 'from-blue-500 to-blue-600'
+      gradient: 'from-blue-500 to-cyan-500'
     },
     {
-      icon: <BarChart3 size={24} />,
+      icon: <BarChart3 size={28} />,
       title: 'Analyse de données',
       desc: 'Importez vos Excel et CSV. Calculs déterministes, graphiques, tendances. Pas d\'hallucination.',
-      color: 'from-emerald-500 to-emerald-600'
+      gradient: 'from-indigo-500 to-blue-500'
     },
     {
-      icon: <ShieldCheck size={24} />,
+      icon: <ShieldCheck size={28} />,
       title: 'Contrôle intelligent',
       desc: 'Doublons, montants inhabituels, dates incohérentes, données manquantes. Détectés automatiquement.',
-      color: 'from-amber-500 to-amber-600'
+      gradient: 'from-purple-500 to-indigo-500'
     },
     {
-      icon: <MessageSquare size={24} />,
+      icon: <MessageSquare size={28} />,
       title: 'Assistant conversationnel',
       desc: 'Posez vos questions en langage naturel. KONTA comprend le contexte de vos documents.',
-      color: 'from-purple-500 to-purple-600'
+      gradient: 'from-pink-500 to-purple-500'
     },
   ];
 
   return (
-    <section id="features" ref={ref} className="py-24 md:py-32 px-6 md:px-10 bg-stone-50">
+    <section id="features" ref={ref} className="py-32 md:py-40 px-6 md:px-10 bg-gradient-to-br from-blue-50 to-indigo-50">
       <div className="max-w-[1400px] mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          className="text-center mb-16"
+          transition={{ duration: 0.8 }}
+          className="text-center mb-20"
         >
-          <h2 className="text-3xl md:text-5xl font-bold text-stone-900 mb-4">
+          <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-6">
             Tout ce dont vous avez besoin
           </h2>
-          <p className="text-lg text-stone-600 max-w-2xl mx-auto">
+          <p className="text-xl text-slate-600 max-w-2xl mx-auto">
             Des outils puissants conçus pour les professionnels
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-8">
           {capabilities.map((cap, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
-              whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-              className="group relative bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100"
+              initial={{ opacity: 0, scale: 0.8, rotateX: -30 }}
+              animate={isInView ? { opacity: 1, scale: 1, rotateX: 0 } : {}}
+              transition={{ delay: i * 0.15, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ scale: 1.03, rotateY: 5, transition: { duration: 0.3 } }}
+              className="group relative bg-white rounded-3xl p-10 shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 border border-blue-100"
             >
               <motion.div
-                whileHover={{ rotate: 360 }}
-                transition={{ duration: 0.6 }}
-                className={`w-14 h-14 rounded-xl bg-gradient-to-br ${cap.color} flex items-center justify-center text-white mb-6 shadow-lg`}
+                whileHover={{ rotate: 360, scale: 1.2 }}
+                transition={{ duration: 0.8 }}
+                className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${cap.gradient} flex items-center justify-center text-white mb-8 shadow-xl`}
               >
                 {cap.icon}
               </motion.div>
-              <h3 className="text-xl font-bold text-stone-900 mb-3">{cap.title}</h3>
-              <p className="text-stone-600 leading-relaxed">{cap.desc}</p>
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-stone-100 to-transparent rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">{cap.title}</h3>
+              <p className="text-lg text-slate-600 leading-relaxed">{cap.desc}</p>
+              <motion.div
+                className={`absolute top-0 right-0 w-40 h-40 bg-gradient-to-br ${cap.gradient} rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`}
+              />
             </motion.div>
           ))}
         </div>
@@ -346,39 +432,46 @@ function Capabilities() {
 }
 
 // ============================================================
-// SPLIT SECTION — Image + Texte
+// SPLIT SECTION — Avec animations spectaculaires
 // ============================================================
 function SplitSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
-    <section id="produit" ref={ref} className="py-24 md:py-32 px-6 md:px-10 bg-white">
-      <div className="max-w-[1400px] mx-auto grid md:grid-cols-2 gap-12 items-center">
+    <section id="produit" ref={ref} className="py-32 md:py-40 px-6 md:px-10 bg-white">
+      <div className="max-w-[1400px] mx-auto grid md:grid-cols-2 gap-16 items-center">
         <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={isInView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.8 }}
+          initial={{ opacity: 0, x: -100, rotateY: -30 }}
+          animate={isInView ? { opacity: 1, x: 0, rotateY: 0 } : {}}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="relative">
-            <img 
+            <motion.img 
               src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&q=80"
               alt="Team working"
-              className="rounded-2xl shadow-2xl"
+              className="rounded-3xl shadow-2xl"
+              whileHover={{ scale: 1.05, rotate: 2 }}
+              transition={{ duration: 0.5 }}
             />
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ delay: 0.5, duration: 0.6 }}
-              className="absolute -bottom-6 -right-6 bg-white rounded-xl p-6 shadow-xl"
+              initial={{ opacity: 0, scale: 0, y: 50 }}
+              animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
+              transition={{ delay: 0.6, duration: 0.8, type: 'spring' }}
+              whileHover={{ scale: 1.1, y: -10 }}
+              className="absolute -bottom-8 -right-8 bg-white rounded-2xl p-8 shadow-2xl border border-blue-100"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center">
-                  <CheckCircle2 className="text-emerald-600" size={24} />
-                </div>
+              <div className="flex items-center gap-4">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                  className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center"
+                >
+                  <CheckCircle2 className="text-white" size={28} />
+                </motion.div>
                 <div>
-                  <p className="text-2xl font-bold text-stone-900">107</p>
-                  <p className="text-sm text-stone-600">Transactions analysées</p>
+                  <p className="text-3xl font-black text-slate-900">107</p>
+                  <p className="text-sm text-slate-600 font-medium">Transactions analysées</p>
                 </div>
               </div>
             </motion.div>
@@ -386,18 +479,22 @@ function SplitSection() {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, x: 50 }}
+          initial={{ opacity: 0, x: 100 }}
           animate={isInView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: 1, delay: 0.2 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-stone-900 mb-6 leading-tight">
-            Un espace de travail,<br />pas un chatbot.
+          <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-8 leading-tight">
+            Un espace de travail,
+            <br />
+            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              pas un chatbot.
+            </span>
           </h2>
-          <p className="text-lg text-stone-600 mb-8 leading-relaxed">
+          <p className="text-xl text-slate-600 mb-10 leading-relaxed">
             Déposez vos documents. Konta les lit, les comprend, et vous aide
             à travailler plus vite. Pas de prompt engineering. Pas de blabla.
           </p>
-          <div className="space-y-4">
+          <div className="space-y-5">
             {[
               'Extraction automatique des données',
               'Calculs déterministes sans hallucination',
@@ -406,15 +503,20 @@ function SplitSection() {
             ].map((item, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, x: 20 }}
+                initial={{ opacity: 0, x: 50 }}
                 animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: 0.4 + i * 0.1 }}
-                className="flex items-center gap-3"
+                transition={{ delay: 0.5 + i * 0.1 }}
+                whileHover={{ x: 10 }}
+                className="flex items-center gap-4 group"
               >
-                <div className="w-6 h-6 rounded-full bg-stone-900 flex items-center justify-center flex-shrink-0">
-                  <Check size={14} className="text-white" />
-                </div>
-                <span className="text-stone-700">{item}</span>
+                <motion.div
+                  whileHover={{ scale: 1.2, rotate: 360 }}
+                  transition={{ duration: 0.5 }}
+                  className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center flex-shrink-0 shadow-lg"
+                >
+                  <Check size={16} className="text-white" />
+                </motion.div>
+                <span className="text-lg text-slate-700 font-medium group-hover:text-blue-600 transition-colors">{item}</span>
               </motion.div>
             ))}
           </div>
@@ -425,7 +527,7 @@ function SplitSection() {
 }
 
 // ============================================================
-// NUMBERS — Section sombre avec compteurs
+// NUMBERS — Section bleue avec compteurs animés
 // ============================================================
 function Numbers() {
   const ref = useRef(null);
@@ -439,25 +541,34 @@ function Numbers() {
   ];
 
   return (
-    <section ref={ref} className="py-24 md:py-32 px-6 md:px-10 bg-stone-900 text-white relative overflow-hidden">
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0" style={{
-          backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-          backgroundSize: '40px 40px'
-        }} />
+    <section ref={ref} className="py-32 md:py-40 px-6 md:px-10 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 text-white relative overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute inset-0 opacity-10">
+        <motion.div
+          animate={{
+            background: [
+              'radial-gradient(circle at 20% 30%, white 0%, transparent 50%)',
+              'radial-gradient(circle at 80% 70%, white 0%, transparent 50%)',
+              'radial-gradient(circle at 50% 50%, white 0%, transparent 50%)',
+              'radial-gradient(circle at 20% 30%, white 0%, transparent 50%)',
+            ],
+          }}
+          transition={{ duration: 10, repeat: Infinity }}
+          className="absolute inset-0"
+        />
       </div>
 
       <div className="max-w-[1400px] mx-auto relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          className="text-center mb-16"
+          transition={{ duration: 0.8 }}
+          className="text-center mb-20"
         >
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+          <h2 className="text-4xl md:text-6xl font-black mb-6">
             En chiffres
           </h2>
-          <p className="text-lg text-stone-400">
+          <p className="text-xl text-white/80">
             Des résultats concrets et mesurables
           </p>
         </motion.div>
@@ -466,22 +577,22 @@ function Numbers() {
           {numbers.map((num, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
-              whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
-              className="text-center p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10"
+              initial={{ opacity: 0, y: 50, scale: 0.8 }}
+              animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+              transition={{ delay: i * 0.15, duration: 0.6, type: 'spring' }}
+              whileHover={{ scale: 1.1, y: -10, transition: { duration: 0.3 } }}
+              className="text-center p-8 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl"
             >
               <motion.p
-                initial={{ scale: 0.5 }}
+                initial={{ scale: 0 }}
                 animate={isInView ? { scale: 1 } : {}}
-                transition={{ delay: i * 0.1 + 0.3, duration: 0.5, type: 'spring' }}
-                className="text-5xl md:text-6xl font-bold mb-2 bg-gradient-to-br from-white to-stone-400 bg-clip-text text-transparent"
+                transition={{ delay: i * 0.15 + 0.3, duration: 0.8, type: 'spring', stiffness: 200 }}
+                className="text-6xl md:text-7xl font-black mb-3 bg-gradient-to-br from-white to-blue-200 bg-clip-text text-transparent"
               >
                 {num.value}
               </motion.p>
-              <p className="text-base text-stone-300 font-medium">{num.label}</p>
-              <p className="text-xs text-stone-500 mt-1">{num.sub}</p>
+              <p className="text-lg text-white font-semibold">{num.label}</p>
+              <p className="text-sm text-white/60 mt-2">{num.sub}</p>
             </motion.div>
           ))}
         </div>
@@ -491,69 +602,91 @@ function Numbers() {
 }
 
 // ============================================================
-// PROCESS — Timeline animée
+// PROCESS — Timeline avec animations spectaculaires
 // ============================================================
 function Process() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   const steps = [
-    { num: '01', title: 'Déposez', desc: 'Glissez vos documents, factures, fichiers Excel dans Konta.', icon: <Zap size={20} /> },
-    { num: '02', title: 'Analyse', desc: 'Extraction automatique. Calculs déterministes. Structuration des données.', icon: <BarChart3 size={20} /> },
-    { num: '03', title: 'Contrôle', desc: 'Détection d\'anomalies. Doublons. Écarts. Éléments à vérifier.', icon: <ShieldCheck size={20} /> },
-    { num: '04', title: 'Restitution', desc: 'Rapports, synthèses, emails. Prêts en quelques secondes.', icon: <FileText size={20} /> },
+    { num: '01', title: 'Déposez', desc: 'Glissez vos documents, factures, fichiers Excel dans Konta.', icon: <Zap size={24} /> },
+    { num: '02', title: 'Analyse', desc: 'Extraction automatique. Calculs déterministes. Structuration des données.', icon: <BarChart3 size={24} /> },
+    { num: '03', title: 'Contrôle', desc: 'Détection d\'anomalies. Doublons. Écarts. Éléments à vérifier.', icon: <ShieldCheck size={24} /> },
+    { num: '04', title: 'Restitution', desc: 'Rapports, synthèses, emails. Prêts en quelques secondes.', icon: <FileText size={24} /> },
   ];
 
   return (
-    <section id="process" ref={ref} className="py-24 md:py-32 px-6 md:px-10 bg-stone-50">
+    <section id="process" ref={ref} className="py-32 md:py-40 px-6 md:px-10 bg-gradient-to-br from-blue-50 to-indigo-50">
       <div className="max-w-[1400px] mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          className="text-center mb-16"
+          transition={{ duration: 0.8 }}
+          className="text-center mb-20"
         >
-          <h2 className="text-3xl md:text-5xl font-bold text-stone-900 mb-4">
-            Quatre étapes. Toujours les mêmes.
+          <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-6">
+            Quatre étapes.
+            <br />
+            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              Toujours les mêmes.
+            </span>
           </h2>
-          <p className="text-lg text-stone-600">
+          <p className="text-xl text-slate-600">
             Un processus simple et efficace
           </p>
         </motion.div>
 
         <div className="relative">
           {/* Connecting line */}
-          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-stone-300 via-stone-400 to-stone-300 hidden md:block" />
+          <motion.div
+            initial={{ scaleY: 0 }}
+            animate={isInView ? { scaleY: 1 } : {}}
+            transition={{ duration: 1.5, ease: 'easeInOut' }}
+            className="absolute left-8 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 via-indigo-500 to-purple-500 hidden md:block origin-top"
+          />
 
-          <div className="space-y-12">
+          <div className="space-y-16">
             {steps.map((step, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: i * 0.2, duration: 0.6 }}
-                className={`relative flex items-center gap-8 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
+                initial={{ opacity: 0, x: i % 2 === 0 ? -100 : 100, rotateZ: i % 2 === 0 ? -5 : 5 }}
+                animate={isInView ? { opacity: 1, x: 0, rotateZ: 0 } : {}}
+                transition={{ delay: i * 0.3, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className={`relative flex items-center gap-10 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
               >
                 <div className={`flex-1 ${i % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
-                  <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                    <div className={`inline-flex items-center gap-3 mb-4 ${i % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
-                      <div className="w-12 h-12 rounded-xl bg-stone-900 flex items-center justify-center text-white">
+                  <motion.div
+                    whileHover={{ scale: 1.05, y: -5 }}
+                    className="bg-white rounded-3xl p-10 shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 border border-blue-100"
+                  >
+                    <div className={`inline-flex items-center gap-4 mb-6 ${i % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+                      <motion.div
+                        whileHover={{ rotate: 360 }}
+                        transition={{ duration: 0.6 }}
+                        className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-xl"
+                      >
                         {step.icon}
-                      </div>
-                      <span className="text-xs text-stone-400 font-mono">{step.num}</span>
+                      </motion.div>
+                      <span className="text-sm text-blue-500 font-mono font-bold">{step.num}</span>
                     </div>
-                    <h3 className="text-2xl font-bold text-stone-900 mb-2">{step.title}</h3>
-                    <p className="text-stone-600">{step.desc}</p>
-                  </div>
+                    <h3 className="text-3xl font-black text-slate-900 mb-3">{step.title}</h3>
+                    <p className="text-lg text-slate-600">{step.desc}</p>
+                  </motion.div>
                 </div>
 
                 {/* Center dot */}
-                <div className="hidden md:flex w-16 h-16 rounded-full bg-white border-4 border-stone-900 items-center justify-center shrink-0 shadow-lg z-10">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={isInView ? { scale: 1 } : {}}
+                  transition={{ delay: i * 0.3 + 0.5, duration: 0.5, type: 'spring' }}
+                  className="hidden md:flex w-20 h-20 rounded-full bg-white border-4 border-blue-600 items-center justify-center shrink-0 shadow-2xl z-10"
+                >
                   <motion.div
-                    animate={{ scale: [1, 1.2, 1] }}
+                    animate={{ scale: [1, 1.3, 1] }}
                     transition={{ duration: 2, repeat: Infinity, delay: i * 0.5 }}
-                    className="w-4 h-4 rounded-full bg-stone-900"
+                    className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600"
                   />
-                </div>
+                </motion.div>
 
                 <div className="flex-1 hidden md:block" />
               </motion.div>
@@ -566,29 +699,29 @@ function Process() {
 }
 
 // ============================================================
-// TESTIMONIAL — Avec image de fond
+// TESTIMONIAL — Avec image de fond bleue
 // ============================================================
 function Testimonial() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
-    <section ref={ref} className="relative py-24 md:py-32 px-6 md:px-10 overflow-hidden">
+    <section ref={ref} className="relative py-32 md:py-40 px-6 md:px-10 overflow-hidden">
       <div className="absolute inset-0">
         <img 
           src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80"
           alt="Office"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-stone-900/80 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/90 via-indigo-900/90 to-purple-900/90 backdrop-blur-sm" />
       </div>
 
-      <div className="max-w-3xl mx-auto text-center relative z-10">
+      <div className="max-w-4xl mx-auto text-center relative z-10">
         <motion.blockquote
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-2xl md:text-4xl font-medium text-white leading-snug mb-8"
+          initial={{ opacity: 0, y: 50, scale: 0.9 }}
+          animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          className="text-3xl md:text-5xl font-black text-white leading-tight mb-10"
         >
           « Je lui donne mon travail,
           <br />
@@ -597,8 +730,8 @@ function Testimonial() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.3 }}
-          className="text-lg text-white/60"
+          transition={{ delay: 0.5 }}
+          className="text-xl text-white/70 font-medium"
         >
           Le principe de Konta
         </motion.p>
@@ -608,7 +741,7 @@ function Testimonial() {
 }
 
 // ============================================================
-// FAQ
+// FAQ — Avec animations fluides
 // ============================================================
 function FAQ() {
   const ref = useRef(null);
@@ -635,40 +768,42 @@ function FAQ() {
   ];
 
   return (
-    <section ref={ref} className="py-24 md:py-32 px-6 md:px-10 bg-white">
-      <div className="max-w-3xl mx-auto">
+    <section ref={ref} className="py-32 md:py-40 px-6 md:px-10 bg-white">
+      <div className="max-w-4xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          className="text-center mb-12"
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-stone-900 mb-4">
+          <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-6">
             Questions fréquentes
           </h2>
         </motion.div>
 
-        <div className="space-y-4">
+        <div className="space-y-5">
           {faqs.map((faq, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: i * 0.1 }}
-              className="bg-stone-50 rounded-xl overflow-hidden"
+              whileHover={{ scale: 1.02 }}
+              className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all border border-blue-100"
             >
               <button
                 onClick={() => setOpen(open === i ? null : i)}
-                className="w-full flex items-center justify-between p-6 text-left cursor-pointer hover:bg-stone-100 transition-colors"
+                className="w-full flex items-center justify-between p-8 text-left cursor-pointer hover:from-blue-100 hover:to-indigo-100 transition-all"
               >
-                <span className="text-lg font-medium text-stone-900 pr-4">
+                <span className="text-xl font-bold text-slate-900 pr-6">
                   {faq.q}
                 </span>
                 <motion.div
                   animate={{ rotate: open === i ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
-                  className="shrink-0"
+                  className="shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center"
                 >
-                  {open === i ? <Minus size={20} /> : <Plus size={20} />}
+                  {open === i ? <Minus size={20} className="text-white" /> : <Plus size={20} className="text-white" />}
                 </motion.div>
               </button>
               <AnimatePresence>
@@ -677,10 +812,10 @@ function FAQ() {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                     className="overflow-hidden"
                   >
-                    <p className="px-6 pb-6 text-stone-600 leading-relaxed">{faq.a}</p>
+                    <p className="px-8 pb-8 text-lg text-slate-700 leading-relaxed">{faq.a}</p>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -693,48 +828,49 @@ function FAQ() {
 }
 
 // ============================================================
-// FINAL CTA
+// FINAL CTA — Bleu spectaculaire
 // ============================================================
 function FinalCTA({ onEnter }: { onEnter: () => void }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
-    <section ref={ref} className="py-24 md:py-32 px-6 md:px-10 bg-stone-900 text-white relative overflow-hidden">
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-          backgroundSize: '40px 40px'
-        }} />
-      </div>
+    <section ref={ref} className="py-32 md:py-40 px-6 md:px-10 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 text-white relative overflow-hidden">
+      <FloatingOrbs />
 
-      <div className="max-w-3xl mx-auto text-center relative z-10">
+      <div className="max-w-4xl mx-auto text-center relative z-10">
         <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          className="text-3xl md:text-5xl font-bold mb-6"
+          initial={{ opacity: 0, y: 50, scale: 0.9 }}
+          animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          className="text-4xl md:text-6xl font-black mb-8"
         >
           Prêt à essayer ?
         </motion.h2>
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.1 }}
-          className="text-lg text-stone-400 mb-10"
+          transition={{ delay: 0.2 }}
+          className="text-xl text-white/80 mb-12"
         >
           Une démo complète est disponible. Aucune inscription requise.
         </motion.p>
         <motion.button
           onClick={onEnter}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.2 }}
-          whileHover={{ scale: 1.05, boxShadow: '0 20px 50px rgba(255,255,255,0.2)' }}
+          transition={{ delay: 0.4 }}
+          whileHover={{ scale: 1.1, boxShadow: '0 30px 60px rgba(255,255,255,0.3)' }}
           whileTap={{ scale: 0.95 }}
-          className="inline-flex items-center gap-3 px-8 py-4 bg-white text-stone-900 text-lg font-semibold rounded-xl hover:bg-stone-50 transition-all cursor-pointer shadow-2xl"
+          className="inline-flex items-center gap-4 px-12 py-6 bg-white text-blue-600 text-xl font-black rounded-2xl hover:bg-blue-50 transition-all cursor-pointer shadow-2xl"
         >
           Ouvrir Konta
-          <ArrowUpRight size={20} />
+          <motion.div
+            animate={{ x: [0, 10, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            <ArrowUpRight size={24} />
+          </motion.div>
         </motion.button>
       </div>
     </section>
@@ -746,20 +882,20 @@ function FinalCTA({ onEnter }: { onEnter: () => void }) {
 // ============================================================
 function Footer() {
   return (
-    <footer className="border-t border-stone-200 py-10 px-6 md:px-10 bg-white">
-      <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 bg-stone-900 rounded flex items-center justify-center">
-            <span className="text-white text-[9px] font-bold">K</span>
+    <footer className="border-t border-blue-100 py-12 px-6 md:px-10 bg-gradient-to-br from-blue-50 to-indigo-50">
+      <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
+            <span className="text-white text-xs font-bold">K</span>
           </div>
-          <span className="text-sm text-stone-600">
-            <span className="font-semibold text-stone-900">Konta</span> by PrimeAxis
+          <span className="text-sm text-slate-700">
+            <span className="font-bold text-slate-900">Konta</span> by PrimeAxis
           </span>
         </div>
-        <p className="text-xs text-stone-500 text-center">
+        <p className="text-sm text-slate-600 text-center font-medium">
           Rendre autonome votre entreprise avec l'Intelligence Artificielle.
         </p>
-        <p className="text-xs text-stone-500">© 2026 PrimeAxis</p>
+        <p className="text-sm text-slate-500">© 2026 PrimeAxis</p>
       </div>
     </footer>
   );

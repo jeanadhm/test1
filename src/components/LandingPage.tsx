@@ -34,7 +34,7 @@ export default function LandingPage({ onEnter }: LandingPageProps) {
 }
 
 // ============================================================
-// NAV — Bleu premium
+// NAV — Bleu premium avec background toujours visible
 // ============================================================
 function Nav({ onEnter }: { onEnter: () => void }) {
   const [scrolled, setScrolled] = useState(false);
@@ -50,9 +50,7 @@ function Nav({ onEnter }: { onEnter: () => void }) {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? 'bg-white/90 backdrop-blur-xl border-b border-blue-100 shadow-lg shadow-blue-500/5' : ''
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-b border-blue-100 shadow-md shadow-blue-500/10"
     >
       <div className="max-w-[1400px] mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
         <motion.div 
@@ -92,40 +90,29 @@ function Nav({ onEnter }: { onEnter: () => void }) {
 }
 
 // ============================================================
-// HERO — Bleu spectaculaire avec animations dingues
+// HERO — Image de fond avec parallax et overlay bleu
 // ============================================================
 function Hero({ onEnter }: { onEnter: () => void }) {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 400]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, 300]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 1.2]);
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, 10]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 1.1]);
 
   return (
-    <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated gradient background */}
+    <section ref={ref} className="relative h-screen flex items-center justify-center overflow-hidden pt-16">
+      {/* Background Image with Parallax */}
       <motion.div 
-        style={{ y, scale, rotate }}
+        style={{ y, scale }}
         className="absolute inset-0 z-0"
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700" />
-        <motion.div
-          animate={{
-            background: [
-              'radial-gradient(ellipse 80% 50% at 20% 40%, rgba(255,255,255,0.1) 0%, transparent 50%)',
-              'radial-gradient(ellipse 80% 50% at 80% 60%, rgba(255,255,255,0.1) 0%, transparent 50%)',
-              'radial-gradient(ellipse 80% 50% at 50% 30%, rgba(255,255,255,0.15) 0%, transparent 50%)',
-              'radial-gradient(ellipse 80% 50% at 20% 40%, rgba(255,255,255,0.1) 0%, transparent 50%)',
-            ],
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
-          className="absolute inset-0"
+        <img 
+          src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1920&q=80"
+          alt="Office desk"
+          className="w-full h-full object-cover"
         />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/85 via-indigo-900/80 to-purple-900/85" />
       </motion.div>
-
-      {/* Floating orbs */}
-      <FloatingOrbs />
 
       {/* Content */}
       <motion.div 
@@ -133,73 +120,54 @@ function Hero({ onEnter }: { onEnter: () => void }) {
         className="relative z-10 text-center px-6 max-w-5xl mx-auto"
       >
         <motion.div
-          initial={{ opacity: 0, y: 50, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ delay: 0.3, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 mb-8 shadow-2xl"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.8 }}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8"
         >
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-          >
-            <Sparkles size={16} className="text-amber-300" />
-          </motion.div>
-          <span className="text-sm text-white font-semibold">Pour les cabinets comptables</span>
+          <Sparkles size={14} className="text-amber-300" />
+          <span className="text-sm text-white/90 font-medium">Pour les cabinets comptables</span>
         </motion.div>
 
         <motion.h1
-          initial={{ opacity: 0, y: 80, rotateX: -90 }}
-          animate={{ opacity: 1, y: 0, rotateX: 0 }}
-          transition={{ delay: 0.5, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white leading-[0.85] tracking-tight mb-8"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-[0.9] tracking-tight mb-6"
         >
           Votre travail,
           <br />
-          <motion.span
-            animate={{
-              backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-            }}
-            transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
-            className="bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-200 bg-clip-text text-transparent bg-[length:200%_auto]"
-          >
+          <span className="bg-gradient-to-r from-amber-200 to-amber-400 bg-clip-text text-transparent">
             accéléré.
-          </motion.span>
+          </span>
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 1 }}
-          className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto mb-12 leading-relaxed font-medium"
+          transition={{ delay: 0.7, duration: 0.8 }}
+          className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10 leading-relaxed"
         >
           Konta lit vos factures, analyse vos fichiers Excel, détecte les anomalies
           et prépare vos rapports. Vous gardez le contrôle.
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 1 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-5"
+          transition={{ delay: 0.9, duration: 0.8 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <motion.button
             onClick={onEnter}
-            whileHover={{ scale: 1.08, boxShadow: '0 30px 60px rgba(0,0,0,0.3)' }}
+            whileHover={{ scale: 1.05, boxShadow: '0 20px 50px rgba(0,0,0,0.3)' }}
             whileTap={{ scale: 0.95 }}
-            className="group relative flex items-center gap-3 px-10 py-5 bg-white text-blue-600 text-lg font-bold rounded-2xl hover:bg-blue-50 transition-all cursor-pointer shadow-2xl overflow-hidden"
+            className="group flex items-center gap-3 px-8 py-4 bg-white text-blue-600 text-base font-semibold rounded-xl hover:bg-blue-50 transition-all cursor-pointer shadow-2xl"
           >
-            <span className="relative z-10 flex items-center gap-3">
-              Accéder au dashboard
-              <ArrowRight size={22} className="group-hover:translate-x-2 transition-transform" />
-            </span>
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500"
-              initial={{ x: '-100%' }}
-              whileHover={{ x: 0 }}
-              transition={{ duration: 0.4 }}
-            />
+            Accéder au dashboard
+            <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
           </motion.button>
-          <span className="text-base text-white/70 font-medium">
+          <span className="text-sm text-white/60">
             Démo interactive incluse
           </span>
         </motion.div>
@@ -209,16 +177,19 @@ function Hero({ onEnter }: { onEnter: () => void }) {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10"
+        transition={{ delay: 1.5 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
       >
         <motion.div
-          animate={{ y: [0, 15, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="flex flex-col items-center gap-2"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-2"
         >
-          <span className="text-xs text-white/60 font-medium">Scroll</span>
-          <ChevronDown size={24} className="text-white/60" />
+          <motion.div
+            animate={{ y: [0, 12, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="w-1 h-2 bg-white/60 rounded-full"
+          />
         </motion.div>
       </motion.div>
     </section>

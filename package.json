@@ -19,9 +19,10 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.0",
-    "recharts": "^2.10.0",
+    "recharts": "^2.15.4",
     "ui-ux-pro-max-cli": "^2.15.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.7",

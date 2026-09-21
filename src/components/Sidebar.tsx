@@ -46,16 +46,16 @@ export default function Sidebar() {
   if (isPresentationMode) return null;
 
   return (
-    <aside className="w-64 bg-white border-r border-slate-200 flex flex-col h-screen sticky top-0">
+    <aside className="w-64 bg-white border-r border-blue-100 flex flex-col h-screen sticky top-0">
       {/* Logo */}
-      <div className="px-5 py-5 border-b border-slate-100">
+      <div className="px-5 py-5 border-b border-blue-100">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-[#1a3a5c] flex items-center justify-center">
+          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
             <span className="text-white font-bold text-sm tracking-tight">K</span>
           </div>
           <div>
             <h1 className="text-base font-bold text-slate-900 tracking-tight">KONTA</h1>
-            <p className="text-[10px] text-slate-400 font-medium tracking-wide uppercase">by PrimeAxis</p>
+            <p className="text-[10px] text-blue-500 font-medium tracking-wide uppercase">by PrimeAxis</p>
           </div>
         </div>
       </div>
@@ -69,11 +69,11 @@ export default function Sidebar() {
               onClick={() => dispatch({ type: 'SET_PAGE', page: item.id })}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 cursor-pointer ${
                 currentPage === item.id
-                  ? 'bg-[#1a3a5c]/5 text-[#1a3a5c] border border-[#1a3a5c]/10'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-transparent'
+                  ? 'bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 border border-blue-200 shadow-sm'
+                  : 'text-slate-600 hover:bg-blue-50/50 hover:text-blue-700 border border-transparent'
               }`}
             >
-              <span className={currentPage === item.id ? 'text-[#1a3a5c]' : 'text-slate-400'}>
+              <span className={currentPage === item.id ? 'text-blue-600' : 'text-slate-400'}>
                 {item.icon}
               </span>
               {item.label}
@@ -82,21 +82,21 @@ export default function Sidebar() {
         </div>
 
         {/* Separator */}
-        <div className="my-4 border-t border-slate-100"></div>
+        <div className="my-4 border-t border-blue-100"></div>
 
         {/* Demo Mode */}
         <button
           onClick={() => dispatch({ type: 'TOGGLE_DEMO_MODE' })}
           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 cursor-pointer ${
             isDemoMode
-              ? 'bg-amber-50 text-amber-700 border border-amber-200'
-              : 'text-slate-600 hover:bg-slate-50 border border-transparent'
+              ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-amber-700 border border-amber-200 shadow-sm'
+              : 'text-slate-600 hover:bg-amber-50/50 border border-transparent'
           }`}
         >
           <Play size={18} className={isDemoMode ? 'text-amber-500' : 'text-slate-400'} />
           Mode Démo
           {isDemoMode && (
-            <span className="ml-auto text-[10px] bg-amber-200 text-amber-800 px-1.5 py-0.5 rounded-full font-semibold">
+            <span className="ml-auto text-[10px] bg-gradient-to-r from-amber-400 to-orange-400 text-white px-1.5 py-0.5 rounded-full font-semibold">
               ON
             </span>
           )}
@@ -112,23 +112,23 @@ export default function Sidebar() {
       </nav>
 
       {/* Bottom */}
-      <div className="px-3 py-4 border-t border-slate-100 space-y-0.5">
+      <div className="px-3 py-4 border-t border-blue-100 space-y-0.5">
         <button
           onClick={() => dispatch({ type: 'SET_PAGE', page: 'settings' })}
           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 cursor-pointer ${
             currentPage === 'settings'
-              ? 'bg-[#1a3a5c]/5 text-[#1a3a5c]'
-              : 'text-slate-600 hover:bg-slate-50'
+              ? 'bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 border border-blue-200 shadow-sm'
+              : 'text-slate-600 hover:bg-blue-50/50'
           }`}
         >
           <Settings size={18} className="text-slate-400" />
           Paramètres
         </button>
         <div className="flex items-center gap-3 px-3 py-2.5 text-sm text-slate-500">
-          <div className="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center">
-            <User size={14} className="text-slate-500" />
+          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">
+            <User size={14} className="text-white" />
           </div>
-          <span className="text-xs">Comptable Démo</span>
+          <span className="text-xs font-medium text-slate-700">Comptable Démo</span>
         </div>
       </div>
 
